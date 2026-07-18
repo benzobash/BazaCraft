@@ -1,0 +1,38 @@
+name: Generate Pack SHA-1
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-hash:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Zip Resource Pack
+        run: |
+          zip -r BazaCraft.zip assets/ pack.mcmeta pack.png
+
+      - name: Calculate SHA-1 Hash
+        id: calc_hash
+        run: |
+          HASH=$(sha1sum BazaCraft.zip | awk '{print $1}')
+          echo "pack_hash=$HASH" >> $GITHUB_OUTPUT
+          echo "Хеш архіву: $HASH"
+
+      - name: Update Release Description with SHA-1
+        uses: softprops/action-gh-release@v2
+        with:
+          files: BazaCraft.zip
+          body: |
+            ### 📦 Завантажити готові текстури
+            Архів `BazaCraft.zip` прикріплено до релізу нижче.
+            
+            ### 🔐 Контрольна сума для сервера (SHA-1)
+            `server-resource-pack-sha1=${{ steps.calc_hash.outputs.pack_hash }}`
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
