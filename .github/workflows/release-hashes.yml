@@ -20,11 +20,9 @@ jobs:
       - name: Calculate SHA-1 and UUID
         id: pack_info
         run: |
-          # Рахуємо sha1
           HASH=$(sha1sum BazaCraft.zip | awk '{print $1}')
           echo "pack_hash=$HASH" >> $GITHUB_OUTPUT
           
-          # Генеруємо випадковий UUID
           PACK_UUID=$(uuidgen)
           echo "pack_uuid=$PACK_UUID" >> $GITHUB_OUTPUT
 
@@ -33,8 +31,8 @@ jobs:
         with:
           files: BazaCraft.zip
           body: |
-            ### 📋 Налаштування для server.properties
-            Скопіюйте блок нижче та повністю замініть ним відповідні рядки у вашому конфігу сервера:
+            ### 📦 Конфіг для вашого server.properties
+            Скопіюйте цей блок тексту повністю та вставте у файл конфігурації сервера Майнкрафт:
             
             ```properties
             resource-pack=https://github.com github.repository /releases/download/{{ github.event.release.tag_name }}/BazaCraft.zip
