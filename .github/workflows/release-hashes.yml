@@ -1,4 +1,4 @@
-лname: Generate Pack SHA-1 and Config
+name: Generate Pack SHA-1 and Config
 
 on:
   release:
@@ -22,7 +22,6 @@ jobs:
         run: |
           HASH=$(sha1sum BazaCraft.zip | awk '{print $1}')
           echo "pack_hash=$HASH" >> $GITHUB_OUTPUT
-          
           PACK_UUID=$(uuidgen)
           echo "pack_uuid=$PACK_UUID" >> $GITHUB_OUTPUT
 
@@ -41,4 +40,3 @@ jobs:
             ```
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
